@@ -62,8 +62,7 @@ userSchema.methods = {
                 .createHmac('sha1', this.salt)
                 .update(plain_pass)
                 .digest('hex');
-        }
-        catch (err) {
+        } catch (err) {
             return 'error encrypting password'
         }
     },
