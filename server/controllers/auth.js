@@ -22,21 +22,16 @@ exports.register = async (req, res) => {
         }
         // generate token using email and password
         const token = jwt.sign(
-            { name, email, password }, 
+            { name, email, password },
             process.env.JWT_ACCOUNT_ACTIVATION, {
             expiresIn: '10m'
         })
-
-        const params =registerEmailParams(name, email, token)
+        const params = registerEmailParams(name, email, token)
         const data = await ses.sendEmail(params).promise()
-        if (data) {
-            console.log(`Email sent thru SES: ${JSON.stringify(data)}`)
-            res.json({
-                message: `Verification link has been sent to ${email}. Please verify your email address.`
-            })
-        } else {
-            throw new Error(`aws ses return no data`)
-        }
+        console.log(`Email sent thru SES: ${JSON.stringify(data)}`)
+        res.json({
+            message: `Verification link has been sent to ${email}. Please verify your email address.`
+        })
     } catch (err) {
         console.log(`Server caught error...`)
         console.log(err)
