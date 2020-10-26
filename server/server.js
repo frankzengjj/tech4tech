@@ -13,7 +13,8 @@ mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopol
         .catch(err => { console.log(err) })
 
 // import routes
-const auth_router = require("./routers/auth")
+const authRouter = require("./routers/auth")
+const userRouter = require('./routers/user')
 
 // middleware
 app.use(morgan('dev'))
@@ -22,7 +23,8 @@ app.use(body_parser.json())
 app.use(cors({
     origin: process.env.CLIENT_URL
 }))
-app.use('/api', auth_router)
+app.use('/api', authRouter)
+app.use('/api', userRouter)
 
 
 const PORT = process.env.PORT || 8080

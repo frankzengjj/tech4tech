@@ -40,8 +40,9 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true })
 
 // virtual fields
-userSchema.virtual('password')
-    .set((password) => {
+userSchema
+    .virtual('password')
+    .set(function(password) {
         this._password = password
         this.salt = this.makeSalt()
         this.hashed_password = this.encryptPassword(password)
@@ -51,11 +52,11 @@ userSchema.virtual('password')
     })
 
 userSchema.methods = {
-    authenticate: (plain_pass) => {
+    authenticate: function(plain_pass) {
         return this.encryptPassword(plain_pass) === this.hashed_password
     },
 
-    encryptPassword: (plain_pass) => {
+    encryptPassword: function(plain_pass) {
         if (!plain_pass) return 'empty password'
         try {
             return crypto
@@ -67,7 +68,7 @@ userSchema.methods = {
         }
     },
 
-    makeSalt: () => {
+    makeSalt: function() {
         return Math.round(new Date().valueOf() * Math.random()) + ''
     }
 }

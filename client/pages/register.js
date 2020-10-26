@@ -1,9 +1,11 @@
 import Layout from '../components/Layout'
-import { useState } from 'react/'
-import Head from 'next/head'
+import { useState, useEffect } from 'react/'
+import Router from 'next/router'
 import Link from 'next/link'
 import axios from 'axios'
 import { showErrorMessage, showSuccessMessage } from '../helpers/alert'
+import { API } from '../config'
+import { authenticate, isAuth } from '../helpers/auth'
 
 const Register = () => {
     const [state, setState] = useState({
@@ -19,12 +21,16 @@ const Register = () => {
         setState({ ...state, [name]: event.target.value, error: "", success: "", bottomText: "Register" })
     }
 
+    useEffect(() => {
+        isAuth() && Router.push('/')
+    }, [])
+
     const { name, email, password, error, success, bottomText } = state
     const handleSubmit = async e => {
         e.preventDefault()
         setState({ ...state, bottomText: 'Registering...' })
         try {
-            const response = await axios.post(`http://localhost:8080/api/register`, {
+            const response = await axios.post(`${API}/register`, {
                 name,
                 email,
                 password
@@ -56,6 +62,7 @@ const Register = () => {
                         type="text"
                         className="form-control"
                         placeholder="Type your name"
+                        required
                     />
                 </div >
 
@@ -66,6 +73,7 @@ const Register = () => {
                         type="text"
                         className="form-control"
                         placeholder="Type Your email"
+                        required
                     />
                 </div>
 
@@ -76,6 +84,7 @@ const Register = () => {
                         type="password"
                         className="form-control"
                         placeholder="Type your password"
+                        required
                     />
                 </div>
                 <button disabled={state.bottomText === "Submitted"}>{state.bottomText}</button>

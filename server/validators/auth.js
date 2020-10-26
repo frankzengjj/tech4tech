@@ -12,3 +12,28 @@ exports.userRegisterValidator = [
         .isLength({ min: 6 })
         .withMessage('Password must be at least 6 character long!')
 ]
+
+exports.userLoginValidator = [
+    check('email')
+        .isEmail()
+        .withMessage('Email must be valid!'),
+    check('password')
+        .isLength({ min: 6 })
+        .withMessage('Password must be at least 6 character long!')
+]
+
+exports.forgotPasswordValidator = [
+    check('email')
+        .isEmail()
+        .withMessage('Email must be valid!')
+]
+
+exports.resetPasswordValidator = [
+    check('newPassword')
+        .isLength({ min: 6 })
+        .withMessage('Password must be at least 6 character long!'),
+    check('resetPasswordLink')
+        .not()
+        .isEmpty()
+        .withMessage('Token is required')
+]
